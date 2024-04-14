@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import requests
 import time
 import re
@@ -10,7 +9,7 @@ BOOK_PATH = 'https://www.gutenberg.org/files/2638/2638-0.txt'
 
 def counter(func):
     """
-    Äåêîðàòîð, ñ÷èòàþùèé è âûâîäÿùèé êîëè÷åñòâî âûçîâîâ äåêîðèðóåìîé ôóíêöèè
+    Декоратор, считающий и выводящий количество вызовов декорируемой функции
     """
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -21,7 +20,7 @@ def counter(func):
 
 def benchmark(func):
     """
-    Äåêîðàòîð, âûâîäÿùèé âðåìÿ, êîòîðîå çàíÿëî âûïîëíåíèå äåêîðèðóåìîé ôóíêöèè
+    Декоратор, выводящий время, которое заняло выполнение декорируемой функции
     """
     @wraps(func)
 
@@ -29,19 +28,19 @@ def benchmark(func):
         start = time.perf_counter()
         result = func(*args, **kwargs)
         end = time.perf_counter()
-        print(f'Âðåìÿ âûïîëíåíèÿ ôóíêöèè {func.__name__}: {end - start}')
+        print(f'Время выполнения функции {func.__name__}: {end - start}')
         return result
     return wrapper
 
 def logging(func):
     """
-    Äåêîðàòîð, êîòîðûé âûâîäèò ïàðàìåòðû ñ êîòîðûìè áûëà âûçâàíà ôóíêöèÿ
+    Декоратор, который выводит параметры с которыми была вызвана функция
     """
     @wraps(func)
     def wrapper(*args, **kwargs):
         result = func(*args, **kwargs)
         params = (*args,)
-        print(f'Ôóíêöèÿ âûçâàíà ñ ïàðàìåòðàìè:\n{params}')
+        print(f'Функция вызвана с параметрами:\n{params}')
         return result
     return wrapper
 
@@ -50,19 +49,19 @@ def logging(func):
 @benchmark
 def word_count(word, url=BOOK_PATH):
     """
-    Ôóíêöèÿ äëÿ ïîñ÷åòà óêàçàííîãî ñëîâà íà html-ñòðàíèöå
+    Функция для посчета указанного слова на html-странице
     """
 
-    # îòïðàâëÿåì çàïðîñ â áèáëèîòåêó Gutenberg è çàáèðàåì òåêñò
+    # отправляем запрос в библиотеку Gutenberg и забираем текст
     raw = requests.get(url).text
 
-    # çàìåíÿåì â òåêñòå âñå íåáóêâåííûå ñèìâîëû íà ïðîáåëû
+    # заменяем в тексте все небуквенные символы на пробелы
     processed_book = re.sub('[\W]+' , ' ', raw).lower()
 
-    # ñ÷èòàåì
+    # считаем
     cnt = len(re.findall(word.lower(), processed_book))
 
-    return f"Cëîâî {word} âñòðå÷àåòñÿ {cnt} ðàç"
+    return f"Cлово {word} встречается {cnt} раз"
     
 print(word_count('whole'))
-print(f'Ôóíêöèÿ áûëà âûçâàíà: {word_count.calls} ðàç')
+print(f'Функция была вызвана: {word_count.calls} раз')
