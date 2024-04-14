@@ -1,4 +1,4 @@
-# -*- coding: windows-1251 -*-
+# -*- coding: utf-8 -*-
 import requests
 import time
 import re
@@ -10,7 +10,7 @@ BOOK_PATH = 'https://www.gutenberg.org/files/2638/2638-0.txt'
 
 def counter(func):
     """
-    Äåêîðàòîð, ñ÷èòàþùèé è âûâîäÿùèé êîëè÷åñòâî âûçîâîâ äåêîðèðóåìîé ôóíêöèèааааееав
+    Äåêîðàòîð, ñ÷èòàþùèé è âûâîäÿùèé êîëè÷åñòâî âûçîâîâ äåêîðèðóåìîé ôóíêöèè
     """
     @wraps(func)
     def wrapper(*args, **kwargs):
