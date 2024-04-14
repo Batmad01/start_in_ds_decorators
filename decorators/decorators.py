@@ -1,4 +1,3 @@
-# -*- coding: cp1251 -*-
 import requests
 import time
 import re
